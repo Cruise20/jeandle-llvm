@@ -1,5 +1,7 @@
 //===-- X86FrameLowering.cpp - X86 Frame Information ----------------------===//
 //
+// Copyright (c) 2025, the Jeandle-LLVM Authors. All Rights Reserved.
+//
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
@@ -3210,6 +3212,10 @@ void X86FrameLowering::determineCalleeSaves(MachineFunction &MF,
     if (STI.isTarget64BitILP32())
       BasePtr = getX86SubSuperRegister(BasePtr, 64);
     SavedRegs.set(BasePtr);
+  }
+
+  if (MF.getFunction().getCallingConv() == CallingConv::Hotspot_JIT) {
+    SavedRegs.set(X86::RBP);
   }
 }
 

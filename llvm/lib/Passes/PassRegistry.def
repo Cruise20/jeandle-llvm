@@ -1,5 +1,7 @@
 //===- PassRegistry.def - Registry of passes --------------------*- C++ -*-===//
 //
+// Copyright (c) 2025, the Jeandle-LLVM Authors. All Rights Reserved.
+//
 // Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
 // See https://llvm.org/LICENSE.txt for license information.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
@@ -234,6 +236,14 @@ MODULE_PASS_WITH_PARAMS(
     "ipsccp", "IPSCCPPass", [](IPSCCPOptions Opts) { return IPSCCPPass(Opts); },
     parseIPSCCPOptions, "no-func-spec;func-spec")
 MODULE_PASS_WITH_PARAMS(
+    "java-operation-lower", "JavaOperationLower",
+    [](int Phase) { return JavaOperationLower(Phase); },
+    parseJavaOperationLowerOptions, "phase=0")
+MODULE_PASS_WITH_PARAMS(
+    "java-operation-lower", "JavaOperationLower",
+    [](int Phase) { return JavaOperationLower(Phase); },
+    parseJavaOperationLowerOptions, "phase=1")
+MODULE_PASS_WITH_PARAMS(
     "loop-extract", "LoopExtractorPass",
     [](bool Single) {
       if (Single)
@@ -451,6 +461,7 @@ FUNCTION_PASS("indirectbr-expand", IndirectBrExpandPass(*TM))
 FUNCTION_PASS("infer-address-spaces", InferAddressSpacesPass())
 FUNCTION_PASS("infer-alignment", InferAlignmentPass())
 FUNCTION_PASS("inject-tli-mappings", InjectTLIMappings())
+FUNCTION_PASS("insert-gc-barriers", InsertGCBarriers())
 FUNCTION_PASS("instcount", InstCountPass())
 FUNCTION_PASS("instnamer", InstructionNamerPass())
 FUNCTION_PASS("instsimplify", InstSimplifyPass())
@@ -545,6 +556,7 @@ FUNCTION_PASS("slsr", StraightLineStrengthReducePass())
 FUNCTION_PASS("stack-protector", StackProtectorPass(*TM))
 FUNCTION_PASS("strip-gc-relocates", StripGCRelocates())
 FUNCTION_PASS("tailcallelim", TailCallElimPass())
+FUNCTION_PASS("tls-pointer-rewrite", TLSPointerRewrite())
 FUNCTION_PASS("transform-warning", WarnMissedTransformationsPass())
 FUNCTION_PASS("trigger-crash-function", TriggerCrashFunctionPass())
 FUNCTION_PASS("trigger-verifier-error", TriggerVerifierErrorPass())
