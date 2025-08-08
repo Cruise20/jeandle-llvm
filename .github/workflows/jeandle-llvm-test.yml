@@ -4,19 +4,35 @@ on:
   pull_request_target:
     branches:
       - 'main'
+  workflow_call:
+    inputs:
+      debug-levels:
+        required: false
+        type: string
+        default: '[ "debug", "release" ]'
 
 jobs:
 
   test:
     name: "jeandle-llvm test"
     runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        debug-level: ${{ fromJSON(inputs.debug-levels) }}
+        include:
+          - debug-level: release
+            flags: '-DCMAKE_BUILD_TYPE=Release'
+          - debug-level: debug
+            flags: '-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g"'
+
     steps:
       - uses: actions/checkout@v4
       - name: build and test
         run : |
           mkdir build
           cd build
-          cmake -G "Unix Makefiles" -DLLVM_TARGETS_TO_BUILD=X86 -DCMAKE_BUILD_TYPE=Release ../llvm
+          cmake -G "Unix Makefiles" -DLLVM_TARGETS_TO_BUILD=X86 ${{ matrix.flags }} ../llvm
           make check-llvm -j$(nproc)
 
   clang-format:
