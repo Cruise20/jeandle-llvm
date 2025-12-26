@@ -17,6 +17,7 @@ add_llvm_component_library(LLVMPasses
   LINK_COMPONENTS
   AggressiveInstCombine
   Analysis
+  JeandleTransforms
   CFGuard
   CodeGen
   GlobalISel
@@ -26,6 +27,7 @@ add_llvm_component_library(LLVMPasses
   IPO
   InstCombine
   IRPrinter
+  Jeandle
   ObjCARC
   Scalar
   Support
